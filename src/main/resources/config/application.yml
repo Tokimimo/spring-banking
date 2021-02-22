@@ -1,0 +1,29 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+spring:
+  application:
+    name: banking
+  flyway:
+    locations: classpath:db/migration
+    sql-migration-prefix: V
+    sql-migration-separator: _
+    sql-migration-suffixes: .sql
+    validate-on-migrate: true
+    placeholder-replacement: false
+    enabled: true
+    out-of-order: false
+  jpa:
+    show-sql: false
+    open-in-view: true
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+  jackson:
+    serialization.write_dates_as_timestamps: false
+    default-property-inclusion: non_null
+    deserialization:
+      fail-on-unknown-properties: false
+      READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE: true

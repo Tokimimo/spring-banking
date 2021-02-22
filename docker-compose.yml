@@ -1,0 +1,21 @@
+version: '3'
+services:
+  database:
+    image: library/postgres:13.2-alpine
+    container_name: database
+    ports:
+    - "5432:5432"
+    volumes:
+    - pgdata:/var/lib/postgresql/data
+    env_file:
+      - config.env
+  banking-backend:
+    image: nicoMadry/spring-banking:latest
+    container_name: banking-backend
+    ports:
+      - "8080:8080"
+      - "8787:8787"
+    depends_on:
+      - database
+    env_file:
+      - config.env

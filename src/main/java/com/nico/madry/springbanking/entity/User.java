@@ -6,6 +6,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
@@ -14,10 +18,28 @@ import javax.validation.constraints.Size;
 
 import com.nico.madry.springbanking.model.AuditedEntity;
 import com.nico.madry.springbanking.model.Gender;
+import com.sun.istack.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "USERS", uniqueConstraints = { @UniqueConstraint(name = "UQ_USER_ID", columnNames = "ID") })
+@Table(name = "users", uniqueConstraints = { @UniqueConstraint(name = "uq_user_id", columnNames = "id") })
 public class User extends AuditedEntity {
+
+	@Id
+	@NotNull
+	@Column(name = "id", precision = 9, nullable = false, updatable = false)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSequencer")
+	@SequenceGenerator(allocationSize = 1, name = "userSequencer", sequenceName = "user_seq")
+	private Long id;
 
 	@NotBlank(message = "The first name is mandatory")
 	@Size(min = 1, max = 255)
@@ -59,112 +81,6 @@ public class User extends AuditedEntity {
 	@Size(min = 1, max = 255)
 	@Column(name = "street")
 	private String street;
-
-	public User() {
-		super();
-	}
-
-	public User(final String firstName, final String lastName, final String password) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.password = password;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(final String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(final String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(final String password) {
-		this.password = password;
-	}
-
-	public String getPasswordSalt() {
-		return passwordSalt;
-	}
-
-	public void setPasswordSalt(final String passwordSalt) {
-		this.passwordSalt = passwordSalt;
-	}
-
-	public String getZipCode() {
-		return zipCode;
-	}
-
-	public void setZipCode(final String zipCode) {
-		this.zipCode = zipCode;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(final String country) {
-		this.country = country;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(final String city) {
-		this.city = city;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(final String street) {
-		this.street = street;
-	}
-
-	public Gender getGender() {
-		return gender;
-	}
-
-	public void setGender(final Gender gender) {
-		this.gender = gender;
-	}
-
-	@Override
-	public boolean equals(final Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		User user = (User) o;
-		return getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName()) && getPassword()
-			  .equals(user.getPassword()) && getPasswordSalt().equals(user.getPasswordSalt());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), getFirstName(), getLastName(), getPassword(), getPasswordSalt(), getCountry(), getZipCode(),
-			  getCity(), getStreet());
-	}
-
-	@Override
-	public String toString() {
-		return "User{" + "firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", password='" + password + '\''
-			  + ", passwordSalt='" + passwordSalt + '\'' + ", country='" + country + '\'' + ", zipCode='" + zipCode + '\'' + ", city='"
-			  + city + '\'' + ", street='" + street + '\'' + '}';
-	}
 }
+
+

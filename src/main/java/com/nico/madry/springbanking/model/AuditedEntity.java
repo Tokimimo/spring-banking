@@ -1,33 +1,27 @@
 package com.nico.madry.springbanking.model;
 
-import java.time.ZonedDateTime;
+import java.io.Serializable;
+import java.time.Instant;
 
+import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
+import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+@Data
 @MappedSuperclass
-public abstract class AuditedEntity extends IdentifiableEntity {
+@EntityListeners(AuditingEntityListener.class)
+public abstract class AuditedEntity implements Serializable {
 
-	@Temporal(TemporalType.DATE)
-	private ZonedDateTime creationDate;
+	@CreatedDate
+	@Column(nullable = false, updatable = false)
+	private Instant createdOn = Instant.now();
 
-	@Temporal(TemporalType.DATE)
-	private ZonedDateTime lastUpdatedDate;
+	@LastModifiedDate
+	private Instant lastModifiedOn = Instant.now();
 
-	public ZonedDateTime getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(final ZonedDateTime creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public ZonedDateTime getLastUpdatedDate() {
-		return lastUpdatedDate;
-	}
-
-	public void setLastUpdatedDate(final ZonedDateTime lastUpdatedDate) {
-		this.lastUpdatedDate = lastUpdatedDate;
-	}
 }
